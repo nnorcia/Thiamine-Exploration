@@ -1,0 +1,399 @@
+---
+title: "Thiamine Exploration"
+author: "Nicholas Norcia"
+date: "May 1, 2018"
+output: html_document
+---
+
+
+![Chemical Structure of Thiamine](C:/Users/Mar/Desktop/3710/food_project_share/thiamine.png)
+
+
+#The Data
+
+We will be looking at data of over **7,000 foods**.
+All recorded by the United States of America
+Deparment of Agricultural.
+
+ 
+Nutrition is the key to living longer.
+Obesity in America has been a reoccuring problem.
+
+
+In 2008, the **obesity** rate among Adult Americans
+was esitmated for men (32.5%)
+and for women (35.5%).
+
+
+![Fat Americans in 2008](C:/Users/Mar/Desktop/3710/food_project_share/obesity.jpg)
+
+
+------
+
+We will be reading in the data from the **U.S.D.A**
+in order to point out healthier foods.
+
+
+This exact data will be read in below as USDA
+and food.
+
+USDA National Nutrient Database for Standard Reference
+
+  https://ndb.nal.usda.gov/ndb/  
+
+ https://www.ars.usda.gov/northeast-area/beltsville-md/beltsville-human-nutrition-resear  ch-center/nutrient-data-laboratory/docs/sr28-download-files/ 
+ 
+ "food <- read.csv("ABBREV.csv")" 
+ 
+ Reading in the data and saving it as the data frame "USDA".
+
+```{r}
+# Read the csv file
+  library(dplyr)
+
+  USDA = read.csv("USDA.csv")
+```
+
+
+We are also reading in the ABBREV.csv and saving it as "food".
+
+```{r}
+food <- read.csv("ABBREV.csv")
+```
+
+
+This will give us the structure of the dataset food.
+
+```{r}
+# Structure of the dataset
+ str(food)
+```
+There are 8,790 observations of 53 variables.
+
+
+The first is an inter code number of the specific food.
+
+The second is a Factor with the name and/or description of the
+food/s.
+
+The remaining variables consist of a combination of
+numbers and intergers.  They are specific measuremnts
+of certain chemicals found in food e.g. water, iron, 
+protein, calcium, thiamine, etc.
+
+We Will be taking a much closer look at Thiamine.
+
+------
+
+
+##Thiamine
+
+Also known as Vitamin B1.
+
+Thiamine or vitamin B1 is a healthy additive found in some common foods.  
+
+If a person does not intake the proper amount of Thiamine alot of problems
+can occur.  A thiamin deficiency can result in Beriberi or Wermicke Encephalopathy.   
+These disesases effect the cardiovascular or nervous system.  
+
+Lack of thiamine can be extremely dangerous.   
+
+The function of Thiamine is a coenzyme that is used by the body
+to metabolize food for energy.  Thiamine also maintains proper
+cardiovascular and nervous system functions.
+
+Alot of thiamine molecules are found in proteins
+and carbohydrates.
+
+Some countries have written laws to require the 
+addition of thiamine to certain foods(grains).  
+
+In the United States you can get a month supply of vitamin B1 for under $25.  
+
+This report will focus on *Thiamine*, a chemical compound, but
+a significant varible in the USDA dataset.
+
+
+![Thaimine Foods](C:/Users/Mar/Desktop/3710/food_project_share/b1.jpg)
+
+------
+
+We are going to take a closer look at Thiamine to see if it has any
+relation to other food characters e.g. Protein or Fat.
+
+```{r}
+# Statistical summary
+  summary(food)
+```
+
+A summary of the food data tells us that 
+the average amount of Thiamine .2231mg.
+
+There is only one extreme Thiamine 
+concentration at 23.3750mg.
+
+-----
+
+Let's find out which food that is.
+We will use which.max to find the 
+row.
+
+```{r}
+# Finding the index of the food with highest sodium levels
+  which.max(food$Thiamin_.mg.)
+```
+
+If we use the name function we can
+see all the variable names.
+
+Shrt_Desc is the food description 
+variable.
+
+We want to find the food name of
+the 8735 row.
+
+```{r}
+# Get names of variables in the dataset
+  names(food)
+# Get the name of the food with highest sodium levels
+  #USDA$Description[265]
+  food$Shrt_Desc[8735]
+```
+
+Interesting the food is "YEAST EXTRACT SPREAD".
+Nobody would ever eat this.
+
+![Yeast Extract Spread](C:/Users/Mar/Desktop/3710/food_project_share/yeast.jpg)
+
+This makes sense beacuse Thiamine is normally
+found in grains or used as a healthy additive.
+
+There must be alot of Thiamine in Yeast.
+
+------
+
+Let's take a look at other foods with alot
+of Thiamine.
+
+```{r}
+# Create a subset of the foods with Thiamine content above 2.5mg
+ HighThaimin = subset(food, Thiamin_.mg.>2.5)
+
+# Count the number of rows, or observations
+  nrow(HighThaimin)
+```
+There are 42 foods with more than 2.5mg of Thiamine.
+
+```{r}
+# Output names of the foods with high Thiamine content
+
+  HighThaimin$Shrt_Desc
+```
+**Interesting, very interesting.**  
+
+Who doesn't love a box of Raisin Bran Crunch?
+Thiamine rich people sure do not.
+
+
+It seems that alot of Thiamine 
+rich foods are Cereals, Baby-Food,
+Soup, Sesame Flour, Power Bars,
+Formula Bars, some Beef, and a few
+others.
+
+
+
+We would not really want to eat 
+Baby-Food or Seasame Flour but
+the others are very interesting.
+
+------
+
+This makes sense because Thiamine
+is found in whole grains and some meats
+but is also used as a healthy dietary
+additive.
+
+```{r}
+# Summary function over Thiamine vector
+  summary(food$Thiamin_.mg.)
+
+# Standard deviation
+  sd(food$Thiamin_.mg., na.rm = TRUE)
+```
+
+The **mean** Thiamine is **.2231mg** with a
+**standard deviation** of **.5238mg.**
+
+
+### Plots
+
+Let's plot Thiamin vs Saturated Fat from the food data frame.
+```{r}
+# Add xlabel, ylabel and title
+  plot(food$Thiamin_.mg., food$FA_Sat_.g., xlab="Thiamin", ylab = "Saturated Fat", main = "Thiamin vs Saturated Fat", col = "blue")
+
+```
+
+
+This did not give us much.
+There is the one "Yease Extract Spread"
+outlier around 24mg. Everthing else is mostly bunched up.
+
+It seems that saturated fat however
+has a reverse relationship with Thiamine.
+When there is more saturated fat there
+is less Thiamin and vice versa.
+
+```{r}
+  plot(food$Thiamin_.mg., food$FA_Sat_.g., xlab="Thiamin", ylab = "Saturated Fat", xlim = c(0,1), main = "Thiamin vs Saturated Fat", col = "blue") 
+```
+A closer look at Thiamine vs Saturated Fat.  The more Thiamine the less
+saturated fat it seems.
+
+------
+
+```{r}
+plot(food$Thiamin_.mg., food$Carbohydrt_.g., xlab="Thiamin", ylab = "Carbs", xlim = c(0,1), main = "Thiamin vs Carbs", col = "green")
+
+plot(food$Thiamin_.mg., food$Carbohydrt_.g., xlab="Thiamin", ylab = "Carbs", xlim = c(0,5), main = "Thiamin vs Carbs", col = "orange")
+```
+Without the 0 values Thiamin and Carbs have a somewhat
+linear relationship.  If a food has alot of Thiamine
+it usually has alot of carbs.
+
+-----
+
+```{r}
+plot(food$Thiamin_.mg., food$Protein_.g., xlab="Thiamin", ylab = "Protein", xlim = c(0,1), main = "Thiamin vs Protein", col = "purple")
+
+plot(food$Thiamin_.mg., food$Protein_.g., xlab="Thiamin", ylab = "Protein", xlim = c(0,5), main = "Thiamin vs Protein", col = "red")
+```
+It seemes alot of foods with Thiamine
+have around 20mg of protein.
+
+------
+
+### Histogram of Thiamine
+```{r}
+# Breaking of Thiamine histogram
+  hist(food$Thiamin_.mg., xlab = "Thiamine (mg)", main = "Histogram of Thiamine", xlim = c(0,1), breaks=1500)
+  hist(food$Thiamin_.mg., xlab = "Thiamine (mg)", main = "Histogram of Thiamine", xlim = c(0,1), breaks=2000)
+```
+Alot of foods have very little Thiamine.  There
+are a couple foods that have a ton of Thiamine like
+Yeast.
+
+------
+
+### Boxplot
+```{r}
+# Boxplots
+  boxplot(food$Thiamin_.mg., ylab = "Thiamine (mg)", main = "Boxplot of Thiamine")
+
+  boxplot(food$Thiamin_.mg., ylab = "Thiamine (mg)", ylim = c(0,5), main = "Boxplot of Thiamine")
+  
+  boxplot(food$Thiamin_.mg., ylab = "Thiamine (mg)", ylim = c(0,1), main = "Boxplot of Thiamine")
+  
+  
+```
+
+------
+
+### Comparing High Values with Thiamine
+
+We want to add a variable to our USDA data
+frame that takes a value 1 if the food has higher
+Thiamine than average, and 0 if the food has
+lower Thiamine than average.
+```{r}
+# Creating a variable that takes value 1 if the food has higher Thiamine than average, 0 if else.
+  HighThiamine = as.numeric(food$Thiamin_.mg. > mean(food$Thiamin_.mg., na.rm=TRUE))
+  str(HighThiamine)
+```
+
+------
+
+Let's add some more of these varibles for Carbs,
+Protein, and Fat.
+```{r}
+# Adding the High Thiamine variable to the dataset
+  food$HighThiamine = as.numeric(food$Thiamin_.mg. > mean(food$Thiamin_.mg., na.rm=TRUE))
+```
+
+```{r}
+# Let's do the same for HighProtein, HigCarbs, HighFat
+# I think all will be interesting varibles to consider against
+# High Thiamine.
+  food$HighCarbs = as.numeric(food$Carbohydrt_.g. > mean(food$Carbohydrt_.g., na.rm=TRUE))
+  food$HighProtein = as.numeric(food$Protein_.g. > mean(food$Protein_.g., na.rm=TRUE))
+  food$HighFat = as.numeric(food$FA_Sat_.g. > mean(food$FA_Sat_.g., na.rm=TRUE))
+```
+
+------
+
+```{r}
+# How many foods have higher Thiamine level than average?
+  table(food$HighThiamine)
+```
+2212 foods have higher than average Thiamine content.
+
+------
+
+```{r}
+# How many foods have both high Thiamine and high carbs?
+  table(food$HighThiamine, food$HighCarbs)
+```
+
+It seems most of the foods are not high in carbs or thiamine.
+There are 763 foods listed as high in carbs and high
+in thiamine.
+
+It seems you can get a high dosage of Thiamine in foods
+with high amounts of carbs.
+
+Which makes sense because Thaimin is normally found in grains.
+
+------
+
+```{r}
+# Average amount of Thiamine sorted by high and low protein?
+  tapply(food$HighThiamine, food$HighProtein, mean, na.rm=TRUE)
+```
+
+It seems on average there is more thiamine concentration (.28mg)
+when a food has high amounts of protein than low (.26mg).
+
+------
+
+```{r}
+# Maximum level of Thiamine in foods with high and low carbs?
+  tapply(food$Thiamin_.mg., food$HighFat, max, na.rm=TRUE)
+
+# Using summary function with tapply
+  tapply(food$Thiamin_.mg., food$HighFat, summary, na.rm=TRUE)
+```
+There is a higher concentraion of Thiamine .23mg when fat is low
+then when there is high fat .21mg.
+
+------
+
+#Conclusion
+
+**Thiamine** is also known as **Vitamin B1**.
+
+Thiamine is a very healthy **dietary addtive**.
+It is found in **grains**, **protein bars**, and **some meats e.g. bacon**.
+
+There is **more Thiamine** in foods that are **low in fat**, **high in protein**, and **high in carbs**.
+
+I would suggest eating **protein bars** or whole wheat grains like **cereal** for your necessary
+Thiamine intake.
+
+In order to prevent Thiamine related severe diseases.
+
+**Eat This**
+
+![Not This](C:/Users/Mar/Desktop/3710/food_project_share/power.jpg)
+
+![](C:/Users/Mar/Desktop/3710/food_project_share/cottonc.jpg)
